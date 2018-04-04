@@ -52,7 +52,7 @@ class StringReader extends AbstractReader
 
             if ($code === 92) {
                 // \
-                $value .= sliceString($body, $chunkStart, $pos + 1);
+                $value .= sliceString($body, $chunkStart, $pos - 1);
                 $code  = charCodeAt($body, $pos);
 
                 switch ($code) {
@@ -82,7 +82,8 @@ class StringReader extends AbstractReader
                         break;
                     case 117:
                         // u
-                        $charCode = uniCharCode(
+                        $unicodeString = sliceString($body, $pos - 1, $pos + 5);
+                        $charCode      = uniCharCode(
                             charCodeAt($body, $pos + 1),
                             charCodeAt($body, $pos + 2),
                             charCodeAt($body, $pos + 3),
@@ -93,12 +94,12 @@ class StringReader extends AbstractReader
                                 $this->lexer->getSource(),
                                 $pos,
                                 sprintf(
-                                    'Invalid character escape sequence: \\u%s',
-                                    sliceString($body, $pos + 1, $pos + 5)
+                                    'Invalid character escape sequence: %s',
+                                    $unicodeString
                                 )
                             );
                         }
-                        $value .= chr($charCode);
+                        $value .= $unicodeString;
                         $pos   += 4;
                         break;
                     default:
