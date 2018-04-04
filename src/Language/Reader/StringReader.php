@@ -125,7 +125,15 @@ class StringReader extends AbstractReader
     {
         $body = $this->lexer->getBody();
 
-        return $code === 34 && charCodeAt($body, $pos + 1) !== 34;
+        if ($code === 34) {
+            if (mb_strlen($body) === 1) {
+                return true;
+            }
+
+            return charCodeAt($body, $pos + 1) !== 34;
+        }
+
+        return false;
     }
 
     /**

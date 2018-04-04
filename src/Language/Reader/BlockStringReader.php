@@ -85,6 +85,10 @@ class BlockStringReader extends AbstractReader
      */
     protected function isTripleQuote(string $body, int $code, int $pos): bool
     {
+        if (mb_strlen($body) < 3) {
+            return false;
+        }
+
         return $code === 34 && charCodeAt($body, $pos + 1) === 34 && charCodeAt($body, $pos + 2) === 34; // """
     }
 
