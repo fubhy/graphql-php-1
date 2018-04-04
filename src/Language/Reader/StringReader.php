@@ -115,7 +115,7 @@ class StringReader extends AbstractReader
             }
         }
 
-        throw new SyntaxErrorException($this->lexer->getSource(), $pos, 'Unterminated string.');
+        throw new SyntaxErrorException($this->lexer->getSource(), $pos - 1, 'Unterminated string.');
     }
 
     /**
